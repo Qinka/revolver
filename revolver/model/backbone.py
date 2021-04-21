@@ -36,8 +36,8 @@ def vgg16(is_caffe=True):
     if is_caffe:
         # substitute original Caffe weights for improved fine-tuning accuracy
         # see https://github.com/jcjohnson/pytorch-vgg
-        caffe_params = model_zoo.load_url('https://s3-us-west-2.amazonaws.com/'
-                                          'jcjohns-models/vgg16-00b39a1b.pth')
+        caffe_params = model_zoo.load_url('https://web.eecs.umich.edu/'
+                                          '~justincj/models/vgg16-00b39a1b.pth')
         for new_p, old_p in zip(vgg16.parameters(), caffe_params.values()):
                 new_p.data.copy_(old_p.view_as(new_p))
     # surgery: decapitate final classifier
