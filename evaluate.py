@@ -51,9 +51,10 @@ def evaluate(model, weights, dataset, datatype, split, count, shot, seed, gpu, h
             metrics.update(seg.to('cpu').numpy(), target.to('cpu').numpy(), aux)
             # optionally save segs
             if seg_path is not None:
-                seg = Image.fromarray(seg.to('cpu').numpy().astype(np.uint8), mode='P')
+                seg = Image.fromarray((seg.to('cpu').numpy() == 1).astype(np.uint8) * 250, mode='P')
                 save_id = f"{aux['slug']}_{aux.get('cls', 'all')}_{aux.get('inst', 'all')}"
                 seg.save(f"{seg_path}/{save_id}.png")
+                Image.fromarray((target[0].to('cpu').numpy() == 1).astype(np.uint8) * 255, mode='P').save(f"{seg_path}/{save_id}_target.png")
 
     print("loss {}".format(total_loss / len(dataset)))
     for metric, score in metrics.score().items():
@@ -73,7 +74,7 @@ def evaluate(model, weights, dataset, datatype, split, count, shot, seed, gpu, h
 @click.option('--split', type=str, default='valid')
 @click.option('--count', type=int, default=None)
 @click.option('--shot', type=int, default=1)
-@click.option('--save_seg', is_flag=True, default=False)
+@click.option('--save-seg', is_flag=True, default=False)
 @click.option('--seed', default=1337)
 @click.option('--gpu', default=0)
 def main(experiment, model, weights, dataset, datatype, split, count, shot, save_seg, seed, gpu):
