@@ -112,7 +112,7 @@ class SBDDSemSeg(VOCSeg):
     """
 
     def __init__(self, **kwargs):
-        kwargs['root_dir'] = kwargs.get('root_dir', 'data/sbdd')
+        kwargs['root_dir'] = kwargs.get('root_dir', '/input0')
         super().__init__(**kwargs)
 
     def listing_path(self):
